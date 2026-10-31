@@ -1,0 +1,56 @@
+# solarlc.com — website (Next.js) + its Python API + its own Postgres.
+# Only the website joins the shared "web" network, where the server's Caddy sends solarlc.com.
+name: solar
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: solar
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: solar
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # The only service that talks to the database
+  api:
+    build: ./api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://solar:${POSTGRES_PASSWORD}@postgres:5432/solar
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        SITE_URL: ${SITE_URL:-https://solarlc.com}
+        WHATSAPP_NUMBER: ${WHATSAPP_NUMBER:-916392554283}
+        GA_ID: ${GA_ID:-}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      API_URL: http://api:8002
+    volumes:
+      - uploads:/app/public/uploads
+    depends_on:
+      - api
+    networks:
+      default:
+      # Unique name on the shared network (other projects also have a "frontend")
+      web:
+        aliases:
+          - solar-frontend
+
+volumes:
+  postgres_data:
+  uploads:
+
+networks:
+  web:
+    external: true

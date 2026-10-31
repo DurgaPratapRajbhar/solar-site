@@ -1,0 +1,65 @@
+"""
+db.py — Postgres connection + the gallery table
+
+Only this Python service touches the database; the Next.js site asks it over HTTP.
+Setting comes from the PROJECT ROOT .env (solar/.env) or the container env:
+  DATABASE_URL=postgresql://user:password@host:5432/solar
+"""
+
+import os
+from pathlib import Path
+
+import psycopg
+from dotenv import load_dotenv
+from psycopg.rows import dict_row
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(PROJECT_ROOT / ".env")
+
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@127.0.0.1:5432/solar")
+
+
+def get_connection():
+    """Open a fresh connection; rows come back as dicts."""
+    return psycopg.connect(DATABASE_URL, row_factory=dict_row, autocommit=True, connect_timeout=5)
+
+
+def fetch_all(sql: str, params: tuple = ()) -> list[dict]:
+    with get_connection() as conn:
+        return conn.execute(sql, params).fetchall()
+
+
+def fetch_one(sql: str, params: tuple = ()) -> dict | None:
+    with get_connection() as conn:
+        return conn.execute(sql, params).fetchone()
+
+
+def execute(sql: str, params: tuple = ()) -> int:
+    """Run a write; returns how many rows it touched."""
+    with get_connection() as conn:
+        return conn.execute(sql, params).rowcount
+
+
+SCHEMA = """
+CREATE TABLE IF NOT EXISTS gallery (
+    id         SERIAL PRIMARY KEY,
+    media_type VARCHAR(5)   NOT NULL DEFAULT 'image' CHECK (media_type IN ('image', 'video')),
+    url        VARCHAR(500) NOT NULL,
+    poster     VARCHAR(500),
+    caption    VARCHAR(200) NOT NULL DEFAULT '',
+    sort_order INT          NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+"""
+
+
+def init_db() -> bool:
+    """Create the table if missing. Returns True if Postgres is reachable."""
+    try:
+        with get_connection() as conn:
+            conn.execute(SCHEMA)
+        print("[DB] Postgres connected, tables ready")
+        return True
+    except Exception as error:
+        print(f"[DB] Postgres unavailable: {error}")
+        return False

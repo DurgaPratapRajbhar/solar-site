@@ -1,0 +1,4 @@
+fastapi              # API server (the Next.js site talks to this)
+uvicorn              # server that runs FastAPI
+psycopg[binary]      # Postgres driver
+python-dotenv        # reads settings from the root .env (local runs)
