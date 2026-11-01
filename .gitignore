@@ -2,3 +2,6 @@ node_modules/
 .next/
 .env
 scratch_home.html
+
+# Local Docker settings (ports, local keys)
+docker-compose.override.yml

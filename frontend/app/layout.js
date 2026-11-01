@@ -1,6 +1,7 @@
 // Root layout — fonts + global CSS + metadata + GA
 import "./globals.css";
 import Analytics from "@/components/Analytics";
+import ChatWidget from "@/components/ChatWidget";
 
 const SITE_URL = process.env.SITE_URL || "https://solarlc.com";
 
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         {children}
+        <ChatWidget />
         <Analytics />
       </body>
     </html>
