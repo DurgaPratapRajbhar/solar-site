@@ -12,6 +12,11 @@ services:
       POSTGRES_DB: solar
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U solar -d solar"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
 
   # The only service that talks to the database
   api:
@@ -22,7 +27,8 @@ services:
     environment:
       DATABASE_URL: postgresql://solar:${POSTGRES_PASSWORD}@postgres:5432/solar
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
   frontend:
     build:

@@ -7,6 +7,7 @@ Setting comes from the PROJECT ROOT .env (solar/.env) or the container env:
 """
 
 import os
+import time
 from pathlib import Path
 
 import psycopg
@@ -59,13 +60,18 @@ ALTER TABLE gallery ADD CONSTRAINT gallery_media_type_check
 """
 
 
-def init_db() -> bool:
-    """Create the table if missing. Returns True if Postgres is reachable."""
-    try:
-        with get_connection() as conn:
-            conn.execute(SCHEMA)
-        print("[DB] Postgres connected, tables ready")
-        return True
-    except Exception as error:
-        print(f"[DB] Postgres unavailable: {error}")
-        return False
+def init_db(attempts: int = 15, pause: float = 2.0) -> bool:
+    """Create the table if missing. Returns True if Postgres is reachable.
+
+    Postgres needs a few seconds after its container starts, so the first tries may fail.
+    """
+    for attempt in range(1, attempts + 1):
+        try:
+            with get_connection() as conn:
+                conn.execute(SCHEMA)
+            print("[DB] Postgres connected, tables ready")
+            return True
+        except Exception as error:
+            print(f"[DB] Postgres not ready (try {attempt}/{attempts}): {error}")
+            time.sleep(pause)
+    return False
