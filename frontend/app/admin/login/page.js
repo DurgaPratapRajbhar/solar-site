@@ -6,6 +6,7 @@ import styles from "../admin.module.css";
 
 export default function AdminLogin() {
   const router = useRouter();
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -18,7 +19,7 @@ export default function AdminLogin() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       if (res.ok) {
         router.push("/admin");
@@ -37,22 +38,31 @@ export default function AdminLogin() {
   return (
     <div className={styles.loginWrap}>
       <form className={styles.loginCard} onSubmit={submit}>
-        <div className={styles.loginLogo}>☀️</div>
+        <img src="/logo.jpg" alt="Indian Solar Light Centre" className={styles.loginLogo} />
         <h1 className={styles.loginTitle}>Solar Admin</h1>
-        <p className={styles.loginSub}>Apna password daalo</p>
+        <p className={styles.loginSub}>User aur password daalein</p>
 
         {error && <div className={styles.loginError}>{error}</div>}
 
         <input
+          type="text"
+          className={styles.loginInput}
+          placeholder="User"
+          autoComplete="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          autoFocus
+        />
+        <input
           type="password"
           className={styles.loginInput}
           placeholder="Password"
+          autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          autoFocus
         />
         <button type="submit" className={styles.loginBtn} disabled={busy}>
-          {busy ? "Ruko..." : "Login 🔑"}
+          {busy ? "Ruko..." : "Login"}
         </button>
       </form>
     </div>

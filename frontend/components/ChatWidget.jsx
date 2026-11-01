@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { SITE } from "@/lib/config";
 
-const WELCOME = "Namaste! 🙏 Solar panel, battery, pump ya PM-KUSUM subsidy ke baare me kuch bhi poochiye.";
+const WELCOME = "Namaste! Solar panel, battery, pump ya PM-KUSUM subsidy ke baare me kuch bhi poochiye.";
 
 export default function ChatWidget() {
   const pathname = usePathname();
@@ -42,7 +42,7 @@ export default function ChatWidget() {
     } catch {
       setMessages((list) => [
         ...list,
-        { role: "assistant", content: "Abhi jawab nahi de pa rahe. Seedha WhatsApp par baat karein 👇", failed: true },
+        { role: "assistant", content: "Abhi jawab nahi de pa rahe. Seedha WhatsApp par baat karein.", failed: true },
       ]);
     } finally {
       setBusy(false);
@@ -52,13 +52,13 @@ export default function ChatWidget() {
   return (
     <>
       <button type="button" className="chat-fab" onClick={() => setOpen(!open)} aria-expanded={open}>
-        {open ? "✕" : "💬 Sawaal poochein"}
+        {open ? "✕" : "Sawaal poochein"}
       </button>
 
       {open && (
         <section className="chat-box" aria-label="Solar sahayak chat">
           <header className="chat-head">
-            <b>☀️ Solar Sahayak</b>
+            <b>Solar Sahayak</b>
             <span>Indian Solar Light Centre</span>
           </header>
 

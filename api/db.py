@@ -43,13 +43,19 @@ def execute(sql: str, params: tuple = ()) -> int:
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS gallery (
     id         SERIAL PRIMARY KEY,
-    media_type VARCHAR(5)   NOT NULL DEFAULT 'image' CHECK (media_type IN ('image', 'video')),
+    media_type VARCHAR(12)  NOT NULL DEFAULT 'image',
     url        VARCHAR(500) NOT NULL,
     poster     VARCHAR(500),
     caption    VARCHAR(200) NOT NULL DEFAULT '',
     sort_order INT          NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ  NOT NULL DEFAULT now()
 );
+
+-- Social posts (YouTube / Instagram / Facebook links) live in the same table
+ALTER TABLE gallery ALTER COLUMN media_type TYPE VARCHAR(12);
+ALTER TABLE gallery DROP CONSTRAINT IF EXISTS gallery_media_type_check;
+ALTER TABLE gallery ADD CONSTRAINT gallery_media_type_check
+    CHECK (media_type IN ('image', 'video', 'youtube', 'instagram', 'facebook'));
 """
 
 

@@ -1,5 +1,5 @@
-// ─── /gallery — sab photos + videos, ek jagah ───
-export const revalidate = 60;
+// ─── /gallery — sab photos + videos, ek jagah (rendered per request, always fresh) ───
+export const dynamic = "force-dynamic";
 
 import { getGallery } from "@/lib/gallery";
 import { SITE } from "@/lib/config";

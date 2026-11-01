@@ -1,5 +1,5 @@
-// ─── Homepage — ISR: cache se fast serve, har 60 sec me fresh ───
-export const revalidate = 60;
+// ─── Homepage — rendered per request, so the gallery always shows what the API has ───
+export const dynamic = "force-dynamic";
 
 import { getGallery } from "@/lib/gallery";
 import { SITE } from "@/lib/config";

@@ -8,11 +8,11 @@ fresh database shows the work straight away. Admin add/delete is the source of t
 from db import execute, fetch_all, fetch_one
 
 SEED = [
-    ("image", "/uploads/chhat-install.jpg", None, "🏠 Chhat pe panel array — install complete"),
-    ("image", "/uploads/bada-array.jpg", None, "⚡ Bada array — fitting ke waqt"),
-    ("image", "/uploads/structure-kaam.jpg", None, "👷 Structure ka kaam — hum khud lagate hain"),
-    ("image", "/uploads/dukaan.jpg", None, "🏪 Hamari dukaan — panel, light, sab stock me"),
-    ("video", "/uploads/kaam-video.mp4", "/uploads/kaam-poster.jpg", "▶ Kaam chalte hue — live video"),
+    ("image", "/uploads/chhat-install.jpg", None, "Chhat pe panel array — install complete"),
+    ("image", "/uploads/bada-array.jpg", None, "Bada array — fitting ke waqt"),
+    ("image", "/uploads/structure-kaam.jpg", None, "Structure ka kaam — hum khud lagate hain"),
+    ("image", "/uploads/dukaan.jpg", None, "Hamari dukaan — panel, light, sab stock me"),
+    ("video", "/uploads/kaam-video.mp4", "/uploads/kaam-poster.jpg", "Kaam chalte hue — live video"),
     ("video", "/uploads/vid-panel-array.mp4", "/uploads/vid-panel-array-poster.jpg", "Poora panel array — roof se view"),
     ("video", "/uploads/vid-panel-angle.mp4", "/uploads/vid-panel-angle-poster.jpg", "Panel angle set karte hue"),
     ("video", "/uploads/vid-structure-start.mp4", "/uploads/vid-structure-start-poster.jpg", "Structure lagana — kaam shuru se"),

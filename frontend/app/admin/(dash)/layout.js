@@ -18,10 +18,10 @@ export default async function DashLayout({ children }) {
   return (
     <div className={styles.shell}>
       <aside className={styles.sidebar}>
-        <div className={styles.brand}>☀️ Admin</div>
+        <div className={styles.brand}>Solar Admin</div>
         <nav className={styles.nav}>
-          <Link href="/admin/gallery">📸 Humara Kaam</Link>
-          <a href="/" target="_blank">🌐 Site dekho</a>
+          <Link href="/admin/gallery">Humara Kaam (gallery)</Link>
+          <a href="/" target="_blank">Site dekhein</a>
         </nav>
         <LogoutButton />
       </aside>
